@@ -1,16 +1,26 @@
-$(document).ready(function () {
-    $("#footer").load("\\Layout\\layout_footer.html");
+const menuButton = document.querySelector('.menu-toggle');
+const navigation = document.querySelector('#site-nav');
 
-    $("#porfolio").click(function () {
-        window.location = "/index.html";
-    })
-    $("#savingurl").click(function () {
-        window.location = "/page\\savingurl.html";
-    })
-    $("#slogan").click(function () {
-        window.location = "/index.html";
-    })
-    $("#blogs").click(function () {
-        window.location = "https://phucexpressapp.herokuapp.com/";
-    })
+menuButton?.addEventListener('click', () => {
+  const isOpen = navigation.classList.toggle('open');
+  menuButton.setAttribute('aria-expanded', String(isOpen));
+  menuButton.setAttribute('aria-label', isOpen ? 'Close navigation' : 'Open navigation');
 });
+
+navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+  navigation.classList.remove('open');
+  menuButton?.setAttribute('aria-expanded', 'false');
+}));
+
+document.querySelector('#year').textContent = new Date().getFullYear();
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
